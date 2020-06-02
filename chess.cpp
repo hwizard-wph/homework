@@ -117,7 +117,106 @@ QPoint chess::highestScorePos(int C)
     return pos;
 }
 
-POINTS chess::seekPionts(int board[15][15])
+EVALUATION chess::evaluate(int board[15][15])
+{
+    const int weight[17] = { 0,1000000,-10000000,50000,-100000,400,-100000,400,-8000,20,-50,20,-50,1,-3,1,-3 };
+    int i, j, ty;
+    int sta[4][17];
+    for (int k = 0; k < 4; ++k) {
+        for (int i = 0; i < 17; ++i)
+        {
+            sta[k][i] = 0;
+        }
+    }
+
+    int bigBoard[17][17]; // 包围了边界的大棋盘
+    for (int i = 0; i < 17; i++)
+    {
+        bigBoard[i][0] = 3;
+    }
+    for (int i = 0; i < 17; i++)
+    {
+        bigBoard[i][16] = 3;
+    }
+    for (int j = 0; j < 17; j++)
+    {
+        bigBoard[0][j] = 3;
+    }
+    for (int j = 0; j < 17; j++)
+    {
+        bigBoard[16][j] = 3;
+    }
+    for (int i = 0; i < 15; i++)
+    {
+        for (int j = 0; j < 15; j++)
+        {
+            bigBoard[i + 1][j + 1] = board[i][j];
+        }
+    }
+    //横向
+    for (i = 1; i <= 15; i++)
+    {
+        for (j = 0; j < 12; j++)
+        {
+            ty = type[bigBoard[i][j]][bigBoard[i][j + 1]][bigBoard[i][j + 2]][bigBoard[i][j + 3]][bigBoard[i][j + 4]][bigBoard[i][j + 5]];
+            ++sta[0][ty];
+        }
+    }
+    //竖向
+    for (j = 1; j <=15; j++)
+    {
+        for (i = 0; i < 12; i++)
+        {
+            ty = type[bigBoard[i][j]][bigBoard[i + 1][j]][bigBoard[i + 2][j]][bigBoard[i + 3][j]][bigBoard[i + 4][j]][bigBoard[i + 5][j]];
+            ++sta[1][ty];
+        }
+    }
+    //左上至右下
+    for (i = 0; i < 12; i++)
+    {
+        for (j = 0; j < 12; j++)
+        {
+            ty = type[bigBoard[i][j]][bigBoard[i + 1][j + 1]][bigBoard[i + 2][j + 2]][bigBoard[i + 3][j + 3]][bigBoard[i + 4][j + 4]][bigBoard[i + 5][j + 5]];
+            ++sta[2][ty];
+        }
+    }
+    //右上至左下
+    for (i = 0; i < 12; i++)
+    {
+        for (j = 5; j < 17; j++)
+        {
+            ty = type[bigBoard[i][j]][bigBoard[i + 1][j - 1]][bigBoard[i + 2][j - 2]][bigBoard[i + 3][j - 3]][bigBoard[i + 4][j - 4]][bigBoard[i+5][j-5]];
+            ++sta[3][ty];
+        }
+    }
+
+    EVALUATION eval;
+    for (int i = 0; i < 8; ++i)
+    {
+        eval.STA[i] = 0;
+    }
+    int score = 0;
+    for (i = 1; i < 17; i++)
+    {
+        score += weight[i] * (sta[0][i] + sta[1][i] + sta[2][i] + sta[3][i]);
+
+        int count = sta[0][i] + sta[1][i] + sta[2][i] + sta[3][i];
+        if (i == WIN) eval.STA[WIN] = count;
+        else if (i == LOSE) eval.STA[LOSE] = count;
+        else if (i == FLEX4) eval.STA[FLEX4] = count;
+        else if (i == BLOCK4) eval.STA[BLOCK4] = count;
+        else if (i == FLEX3) eval.STA[FLEX3] = count;
+    }
+    eval.res = R_BOTH;
+
+    if (eval.STA[WIN] > 0)eval.res = R_WHITE;
+    else if (eval.STA[LOSE] > 0)eval.res = R_BLACK;
+
+    eval.score = score;
+    return eval;
+}
+
+POINTS chess::seekPoints(int board[15][15])
 {
     bool can[15][15];
     int score[15][15];
@@ -219,6 +318,63 @@ void chess::oppsite(int b1[15][15], int b2[15][15])
             if (b1[i][j] == C_EMPTY) b2[i][j] = C_EMPTY;
             else if (b1[i][j] == C_WHITE) b2[i][j] = C_BLACK;
             else b2[i][j] = C_WHITE;
+        }
+    }
+}
+
+int chess::analyze(int board[15][15], int dep, int alpha, int beta)
+{
+    EVALUATION eval = evaluate(board);
+    if (dep == 0 || eval.res != R_BOTH)
+    {
+        ++nodeNum;
+        if (dep == 0)
+        {
+            POINTS p = seekPoints(board);
+            return p.score[0];
+        }
+        else
+        {
+            return eval.score;
+        }
+    }
+    else if (dep % 2 == 0) // 极大化层，白棋利益最大化
+    {
+        POINTS p = seekPoints(board);//贪心找出对白最有利的点
+        for (int i = 0; i < 10; ++i)
+        {
+            int copyBoard[15][15];
+            copy(board, copyBoard);
+            copyBoard[p.pos[i].x()][p.pos[i].y()] = C_WHITE;
+            int nxtA = analyze(copyBoard, dep - 1, alpha, beta);
+            if (nxtA > alpha)
+            {
+                alpha = nxtA;
+                if (dep == 6)
+                {
+                    decision.pos = p.pos[i];
+                    decision.score = nxtA;
+                }
+            }
+            if (alpha >= beta) break;
+        }
+    }
+    else// 极小化曾，黑棋利益最大化
+    {
+        int oppBoard[15][15];
+        oppsite(board, oppBoard);
+        POINTS p = seekPoints(oppBoard);//将棋盘黑白子的颜色取反，贪心找出对黑最有利的点
+        for (int i = 0; i < 10; ++i)
+        {
+            int copyBoard[15][15];
+            copy(board, copyBoard);
+            copyBoard[p.pos[i].x()][p.pos[i].y()] = C_BLACK;
+            int nxtA = analyze(copyBoard, dep - 1, alpha, beta);
+            if (nxtA < beta)
+            {
+                beta = nxtA;
+            }
+            if (alpha >= beta) break;
         }
     }
 }
