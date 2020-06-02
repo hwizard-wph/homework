@@ -45,7 +45,7 @@ int chess::calcOnePos(int board[15][15], int row, int col, int C)
         for (int j = 0; j < 5; ++j)
         {
             QPoint st = getPos(row, col, UP + i, j - 4);
-            QPoint ed = getPos(st.x(), st.y(), UP + i, 4);
+            QPoint ed = getPos(st.x(), st.y(), UP + i, 4);//五元组的起点终点
             if (checkBound(st) && checkBound(ed))
             {
                 int white = 0;
@@ -359,7 +359,7 @@ int chess::analyze(int board[15][15], int dep, int alpha, int beta)
             if (alpha >= beta) break;
         }
     }
-    else// 极小化曾，黑棋利益最大化
+    else// 极小化层，黑棋利益最大化
     {
         int oppBoard[15][15];
         oppsite(board, oppBoard);
