@@ -134,45 +134,45 @@ void chess::initType() {
                                                 type[p1][p2][p3][p4][p5][p6] = BLOCK2;
                                         }
                                     }
-                                }
-                                else if (p6 == 3 && p1 != 3)
-                                {
-                                    //有边界
-                                    //白冲4
-                                    if (x == 0 && y == 4)
+                                    else if (p6 == 3 && p1 != 3)
                                     {
-                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
-                                            type[p1][p2][p3][p4][p5][p6] = BLOCK4;
-                                    }
-                                    //黑冲4
-                                    if (x == 4 && y == 0)
-                                    {
-                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
-                                            type[p1][p2][p3][p4][p5][p6] = block4;
-                                    }
-                                    //黑眠3
-                                    if (x == 3 && y == 0)
-                                    {
-                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
-                                            type[p1][p2][p3][p4][p5][p6] = BLOCK3;
-                                    }
-                                    //白眠3
-                                    if (x == 0 && y == 3)
-                                    {
-                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
-                                            type[p1][p2][p3][p4][p5][p6] = block3;
-                                    }
-                                    //黑眠2
-                                    if (x == 2 && y == 0)
-                                    {
-                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
-                                            type[p1][p2][p3][p4][p5][p6] = BLOCK2;
-                                    }
-                                    //白眠2
-                                    if (x == 0 && y == 2)
-                                    {
-                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
-                                            type[p1][p2][p3][p4][p5][p6] = block2;
+                                        //右边界
+                                        //白冲4
+                                        if (x == 0 && y == 4)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = BLOCK4;
+                                        }
+                                        //黑冲4
+                                        if (x == 4 && y == 0)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = block4;
+                                        }
+                                        //黑眠3
+                                        if (x == 3 && y == 0)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = BLOCK3;
+                                        }
+                                        //白眠3
+                                        if (x == 0 && y == 3)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = block3;
+                                        }
+                                        //黑眠2
+                                        if (x == 2 && y == 0)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = BLOCK2;
+                                        }
+                                        //白眠2
+                                        if (x == 0 && y == 2)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = block2;
+                                        }
                                     }
                                 }
                                 else
@@ -214,7 +214,7 @@ void chess::initType() {
                                         if (type[p1][p2][p3][p4][p5][p6] == 0)
                                             type[p1][p2][p3][p4][p5][p6] = block2;
                                     }
-                             }
+                                }
                          }
                      }
                  }
