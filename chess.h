@@ -62,6 +62,7 @@ public:
 private:
     int type[4][4][4][4][4][4];
 public:
+    void initType();
     bool checkBound(QPoint);//判断边界
     QPoint getPos(int, int, int, int);//得到五子组的开头结尾坐标
     int calcOnePos(int [15][15], int , int, int);//贪心算一个位置所在的五个五子组的得分总和

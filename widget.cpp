@@ -8,6 +8,7 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
     game = new gamewighet();
+    game->hide();
     connect(this->ui->btn_player,SIGNAL(clicked(bool)),this,SLOT(playerButtonPushed()));
     connect(this->ui->btn_ai,SIGNAL(clicked(bool)),this,SLOT(aiButtonPushed()));
     connect(game, &gamewighet::returnSignal, this, &Widget::show);
@@ -20,8 +21,12 @@ Widget::~Widget()
 
 void Widget::playerButtonPushed() {
     this->hide();
+    game->show();
+    game->setMode(PEOPLE);
 }
 
 void Widget::aiButtonPushed() {
     this->hide();
+    game->show();
+    game->setMode(AI);
 }

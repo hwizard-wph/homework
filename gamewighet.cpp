@@ -15,7 +15,9 @@ gamewighet::gamewighet(QWidget *parent) :
             chessboard[i][j].setY(20 + 30 * j);
         }
     }
-    connect(this->ui->returnButton, SIGNAL(click(bool)), this, SLOT(returnButtonPushed()));
+    //由于qt中坐标轴的原因，再绘制过程中为（i，j）表示第i列第j行的坐标
+    //而在棋盘中（i，j）则表示第i行第j列的位置
+    connect(this->ui->returnButton, SIGNAL(clicked(bool)), this, SLOT(returnButtonPushed()));
     setMouseTracking(true);
     initGame();
 }
@@ -73,28 +75,30 @@ void gamewighet::paintEvent(QPaintEvent *event)
             {
                 if (playChess.chesses[i][j] == C_BLACK) painter.setBrush(Qt::black);
                 else painter.setBrush(Qt::white);
-                painter.drawEllipse(chessboard[i][j].x() - 10, chessboard[i][j].y() - 10, 20, 20);
+                painter.drawEllipse(chessboard[j][i].x() - 10, chessboard[j][i].y() - 10, 20, 20);
             }
         }
     }
-
+    //画棋子
 }
 
 void gamewighet::mouseMoveEvent(QMouseEvent *event)
 {
-    if (event->x() >= 5 && event->x() <=455 && event->y() >= 5 && event->y() <= 5)
+    if (event->x() >= 5 && event->x() <=455 && event->y() >= 5 && event->y() <= 455)
     {
         setCursor(Qt::BlankCursor);
         for (int i = 0; i < 15; ++i)
         {
             for (int j = 0; j < 15; ++j)
             {
-                if (abs(chessboard[i][j].x() - event->x()) <= 15 &&
-                    abs(chessboard[i][j].y() - event->x()) <= 15)
+                float x = event->x();
+                float y = event->y();
+                if (abs(chessboard[i][j].x() - x) <= 15 &&
+                    abs(chessboard[i][j].y() - y) <= 15)
                 {
-                    nowCol = i;
                     nowRow = j;
-                    if (playChess.chesses[i][j] != C_EMPTY)
+                    nowCol = i;
+                    if (playChess.chesses[nowRow][nowCol] != C_EMPTY)
                     {
                         setCursor(Qt::ForbiddenCursor);
                     }
@@ -182,7 +186,7 @@ void gamewighet::chessMoveOne(int row, int col)
         turn = T_BLACK;
         playChess.chesses[row][col] = C_WHITE;
     }
-    gameResult res = playChess.evaluate(playChess.chesses).result;
+    gameResult res = playChess.evaluate(playChess.chesses).res;
     QMessageBox msg;
     msg.setIcon(QMessageBox::Critical);
     msg.setStandardButtons(QMessageBox::Ok);
@@ -215,11 +219,8 @@ void gamewighet::chessMoveOne(int row, int col)
 void gamewighet::chessOneByAI()
 {
     playChess.nodeNum = 0;
-    if (!playChess.kill(playChess.chesses, 16))
-    {
-        playChess.analyze(playChess.chesses, 6, INT_MIN, INT_MAX);
-    }
-    QPoint p = playChess.decison.pos;
+    playChess.analyze(playChess.chesses, 6, INT_MIN, INT_MAX);
+    QPoint p = playChess.decision.pos;
     if (isLegalMove(p.x(), p.y()))
     {
         chessMoveOne(p.x(), p.y());

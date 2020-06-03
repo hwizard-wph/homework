@@ -2,8 +2,225 @@
 
 chess::chess()
 {
-    nodeNum = 0;
     initType();
+}
+
+void chess::initType() {
+    memset(type, 0, sizeof(type));
+    type[2][2][2][2][2][2] = WIN;
+    type[2][2][2][2][2][0] = WIN;
+    type[0][2][2][2][2][2] = WIN;
+    type[2][2][2][2][2][1] = WIN;
+    type[1][2][2][2][2][2] = WIN;
+    type[3][2][2][2][2][2] = WIN;//边界考虑
+    type[2][2][2][2][2][3] = WIN;
+    //黑连5，ai输
+    type[1][1][1][1][1][1] = LOSE;
+    type[1][1][1][1][1][0] = LOSE;
+    type[0][1][1][1][1][1] = LOSE;
+    type[1][1][1][1][1][2] = LOSE;
+    type[2][1][1][1][1][1] = LOSE;
+    type[3][1][1][1][1][1] = LOSE;
+    type[1][1][1][1][1][3] = LOSE;
+    //白活4
+    type[0][2][2][2][2][0] = FLEX4;
+    //黑活4
+    type[0][1][1][1][1][0] = flex4;
+    //白活3
+    type[0][2][2][2][0][0] = FLEX3;
+    type[0][0][2][2][2][0] = FLEX3;
+    type[0][2][0][2][2][0] = FLEX3;
+    type[0][2][2][0][2][0] = FLEX3;
+    //黑活3
+    type[0][1][1][1][0][0] = flex3;
+    type[0][0][1][1][1][0] = flex3;
+    type[0][1][0][1][1][0] = flex3;
+    type[0][1][1][0][1][0] = flex3;
+    //白活2
+    type[0][2][2][0][0][0] = FLEX2;
+    type[0][2][0][2][0][0] = FLEX2;
+    type[0][2][0][0][2][0] = FLEX2;
+    type[0][0][2][2][0][0] = FLEX2;
+    type[0][0][2][0][2][0] = FLEX2;
+    type[0][0][0][2][2][0] = FLEX2;
+    //黑活2
+    type[0][1][1][0][0][0] = flex2;
+    type[0][1][0][1][0][0] = flex2;
+    type[0][1][0][0][1][1] = flex2;
+    type[0][0][1][1][0][0] = flex2;
+    type[0][0][1][0][1][0] = flex2;
+    type[0][0][0][1][1][0] = flex2;
+    //白活1
+    type[0][2][0][0][0][0] = FLEX1;
+    type[0][0][2][0][0][0] = FLEX1;
+    type[0][0][0][2][0][0] = FLEX1;
+    type[0][0][0][0][2][0] = FLEX1;
+    //黑活1
+    type[0][1][0][0][0][0] = flex1;
+    type[0][0][1][0][0][0] = flex1;
+    type[0][0][0][1][0][0] = flex1;
+    type[0][0][0][0][1][0] = flex1;
+
+    int p1, p2, p3, p4, p5, p6, x, y, ix, iy;
+    //x:左边5个格子中黑子个数，y:左边5个格子中白子个数,ix:右边5个中黑子个数,iy:右边5个格子中白字个数
+    for (p1 = 0; p1 < 4; ++p1)
+    {
+        for (p2 = 0; p2 < 3; ++p2)
+        {
+             for (p3 = 0; p3 < 3; ++p3)
+             {
+                 for (p4 = 0; p4 < 3; ++p4)
+                 {
+                     for (p5 = 0; p5 < 3; ++p5)
+                     {
+                         for (p6 = 0; p6 < 4; ++p6)
+                         {
+                             x = y = ix = iy = 0;
+                             if (p1 == 1) x++;
+                             else if (p1 == 2) y++;
+
+                             if (p2 == 1) { x++; y++; }
+                             else if (p2 == 2) { x++; y++; }
+
+                             if (p3 == 1) { x++; ix++; }
+                             else if (p3 == 2) { y++; iy++; }
+
+                             if (p4 == 1) { x++; ix++; }
+                             else if (p4 == 2) { y++; iy++; }
+
+                             if (p5 == 1) { x++; ix++; }
+                             else if (p5 == 2) { y++; iy++; }
+
+                             if (p6 == 1)ix++;
+                             else if (p6 == 2)iy++;
+
+                             if (p1 == 3 || p6 == 3)
+                             {
+                                    //有边界
+                                    if (p1 == 3 && p6 != 3)
+                                    {
+                                        //左边界
+                                        //白冲4
+                                        if (ix == 0 && iy == 4)
+                                        {
+                                            //若右边有活4无妨，因为活4的权重远大于冲4
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = BLOCK4;
+
+                                        }
+                                        //黑冲4
+                                        if (ix == 4 && iy == 0)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = block4;
+
+                                        }
+                                        //白眠3
+                                        if (ix == 0 && iy == 3)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = BLOCK3;
+                                        }
+                                        //黑眠3
+                                        if (ix == 3 && iy == 0)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = block3;
+                                        }
+                                        //白眠2
+                                        if (ix == 0 && iy == 2)
+                                        {
+                                            if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                                type[p1][p2][p3][p4][p5][p6] = BLOCK2;
+                                        }
+                                    }
+                                }
+                                else if (p6 == 3 && p1 != 3)
+                                {
+                                    //有边界
+                                    //白冲4
+                                    if (x == 0 && y == 4)
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = BLOCK4;
+                                    }
+                                    //黑冲4
+                                    if (x == 4 && y == 0)
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = block4;
+                                    }
+                                    //黑眠3
+                                    if (x == 3 && y == 0)
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = BLOCK3;
+                                    }
+                                    //白眠3
+                                    if (x == 0 && y == 3)
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = block3;
+                                    }
+                                    //黑眠2
+                                    if (x == 2 && y == 0)
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = BLOCK2;
+                                    }
+                                    //白眠2
+                                    if (x == 0 && y == 2)
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = block2;
+                                    }
+                                }
+                                else
+                                {
+                                    //无边界
+                                    //白冲4
+                                    if ((x == 0 && y == 4) || (ix == 0 && iy == 4))
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = BLOCK4;
+                                    }
+                                    //黑冲4
+                                    if ((x == 4 && y == 0) || (ix == 4 && iy == 0))
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = block4;
+                                    }
+                                    //白眠3
+                                    if ((x == 0 && y == 3) || (ix == 0 && iy == 3))
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = BLOCK3;
+                                    }
+                                    //黑眠3
+                                    if ((x == 3 && y == 0) || (ix == 3 && iy == 0))
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = block3;
+                                    }
+                                    //白眠2
+                                    if ((x == 0 && y == 2) || (ix == 0 && iy == 2))
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = BLOCK2;
+                                    }
+                                    //黑眠2
+                                    if ((x == 2 && y == 0) || (ix == 2 && iy == 0))
+                                    {
+                                        if (type[p1][p2][p3][p4][p5][p6] == 0)
+                                            type[p1][p2][p3][p4][p5][p6] = block2;
+                                    }
+                             }
+                         }
+                     }
+                 }
+             }
+        }
+    }
 }
 
 bool chess::checkBound(QPoint p)
@@ -11,7 +228,7 @@ bool chess::checkBound(QPoint p)
     return (p.x() >= 0 && p.x() < 15 && p.y() >= 0 && p.y() < 15);
 }
 
-QPoint getPos(int row, int col, int dir, int len)
+QPoint chess::getPos(int row, int col, int dir, int len)
 {
     QPoint retPos;
     if (dir == UP)
@@ -76,7 +293,7 @@ int chess::listScore(int white, int black, int C)
         else if (black == 4 && white == 0) return 800000;
         else if (black == 0 && white == 1) return 10;
         else if (black == 0 && white == 2) return 400;
-        else if (black == 0 && white == 3) return 7500;
+        else if (black == 0 && white == 3) return 2000;
         else return 200000;
     }
     else
@@ -87,11 +304,12 @@ int chess::listScore(int white, int black, int C)
         else if (white == 4 && black == 0) return 800000;
         else if (white == 0 && black == 1) return 10;
         else if (white == 0 && black == 2) return 400;
-        else if (white == 0 && black == 3) return 7500;
+        else if (white == 0 && black == 3) return 2000;
         else return 200000;
     }
 }
 
+/*
 QPoint chess::highestScorePos(int C)
 {
     int highestScore = INT_MIN;
@@ -116,18 +334,14 @@ QPoint chess::highestScorePos(int C)
     pos.setY(col);
     return pos;
 }
+*/
 
 EVALUATION chess::evaluate(int board[15][15])
 {
-    const int weight[17] = { 0,1000000,-10000000,50000,-100000,400,-100000,400,-8000,20,-50,20,-50,1,-3,1,-3 };
+    const int weight[17] = {0, 1000000, -10000000, 50000, -100000, 400, -100000, 400, -8000, 20, -50, 20, -50, 1, -3, 1, -3};
     int i, j, ty;
     int sta[4][17];
-    for (int k = 0; k < 4; ++k) {
-        for (int i = 0; i < 17; ++i)
-        {
-            sta[k][i] = 0;
-        }
-    }
+    memset(sta, 0, sizeof (sta));
 
     int bigBoard[17][17]; // 包围了边界的大棋盘
     for (int i = 0; i < 17; i++)
@@ -185,16 +399,14 @@ EVALUATION chess::evaluate(int board[15][15])
     {
         for (j = 5; j < 17; j++)
         {
-            ty = type[bigBoard[i][j]][bigBoard[i + 1][j - 1]][bigBoard[i + 2][j - 2]][bigBoard[i + 3][j - 3]][bigBoard[i + 4][j - 4]][bigBoard[i+5][j-5]];
+            ty = type[bigBoard[i][j]][bigBoard[i + 1][j - 1]][bigBoard[i + 2][j - 2]][bigBoard[i + 3][j - 3]][bigBoard[i + 4][j - 4]][bigBoard[i + 5][j-5]];
             ++sta[3][ty];
         }
     }
 
     EVALUATION eval;
-    for (int i = 0; i < 8; ++i)
-    {
-        eval.STA[i] = 0;
-    }
+    memset (eval.STA, 0, sizeof (eval.STA));
+
     int score = 0;
     for (i = 1; i < 17; i++)
     {
@@ -232,30 +444,30 @@ POINTS chess::seekPoints(int board[15][15])
     {
         for (int j = 0; j < 15; ++j)
         {
-            if (chesses[i][j] == C_EMPTY)
+            if (board[i][j] != C_EMPTY)
             {
                 for (int k = -3; k <= 3; ++k)
                 {
                     int ii, jj;
                     ii = i; jj = j + k;
-                    if (jj >= 0 && jj < 15 && chesses[ii][jj] == C_EMPTY)
+                    if (jj >= 0 && jj < 15 && board[ii][jj] == C_EMPTY)
                     {
                         can[ii][jj] = 1;
                     }
                     ii = i + k; jj = j;
-                    if (ii >= 0 && ii < 15 && chesses[ii][jj] == C_EMPTY)
+                    if (ii >= 0 && ii < 15 && board[ii][jj] == C_EMPTY)
                     {
                         can[ii][jj] = 1;
                     }
                     ii = i + k; jj = j + k;
-                    if (ii >= 0 && ii < 15 && jj >= 0 && jj < 15 && chesses[ii][jj] == C_EMPTY)
+                    if (ii >= 0 && ii < 15 && jj >= 0 && jj < 15 && board[ii][jj] == C_EMPTY)
                     {
-                        chesses[ii][jj] = 1;
+                        can[ii][jj] = 1;
                     }
-                    ii = i - k; jj = j + k;
-                    if (ii >= 0 && ii < 15 && jj >= 0 && jj < 15 && chesses[ii][jj] == C_EMPTY)
+                    ii = i + k; jj = j - k;
+                    if (ii >= 0 && ii < 15 && jj >= 0 && jj < 15 && board[ii][jj] == C_EMPTY)
                     {
-                        chesses[ii][jj] = 1;
+                        can[ii][jj] = 1;
                     }
                 }
             }
@@ -267,7 +479,7 @@ POINTS chess::seekPoints(int board[15][15])
         {
             if (can[i][j] == 1)
             {
-                score[i][j] = calcOnePos(chesses, i, j, C_WHITE);
+                score[i][j] = calcOnePos(board, i, j, C_WHITE);
             }
         }
     }
@@ -358,6 +570,7 @@ int chess::analyze(int board[15][15], int dep, int alpha, int beta)
             }
             if (alpha >= beta) break;
         }
+        return alpha;
     }
     else// 极小化层，黑棋利益最大化
     {
@@ -376,6 +589,7 @@ int chess::analyze(int board[15][15], int dep, int alpha, int beta)
             }
             if (alpha >= beta) break;
         }
+        return beta;
     }
 }
 
