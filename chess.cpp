@@ -79,8 +79,8 @@ void chess::initType() {
                              if (p1 == 1) x++;
                              else if (p1 == 2) y++;
 
-                             if (p2 == 1) { x++; y++; }
-                             else if (p2 == 2) { x++; y++; }
+                             if (p2 == 1) { x++; ix++; }
+                             else if (p2 == 2) { y++; iy++; }
 
                              if (p3 == 1) { x++; ix++; }
                              else if (p3 == 2) { y++; iy++; }
