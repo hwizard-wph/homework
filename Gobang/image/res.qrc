@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>timg.jpg</file>
+        <file>res.qrc</file>
+        <file>mark.jpg</file>
+    </qresource>
+</RCC>
