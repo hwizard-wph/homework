@@ -30,6 +30,13 @@ gamewighet::~gamewighet()
     delete ui;
 }
 
+void gamewighet::clearScore()
+{
+    whiteScore = blackScore = 0;
+    ui->lcd_white->display(whiteScore);
+    ui->lcd_black->display(blackScore);
+}
+
 void gamewighet::returnButtonPushed()
 {
     emit returnSignal();

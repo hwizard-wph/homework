@@ -25,6 +25,7 @@ public:
     explicit gamewighet(QWidget *parent = nullptr);
     ~gamewighet();
     void initGame();
+    void clearScore();
     void setMode(gameMode md) {mode = md;}
     bool chessOneByPlayer();
     void chessMoveOne(int, int);

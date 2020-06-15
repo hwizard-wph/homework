@@ -33,6 +33,7 @@ void Widget::playerButtonPushed()
 {
     this->hide();
     game->show();
+    game->clearScore();
     game->setMode(PEOPLE);
 }
 
@@ -40,6 +41,7 @@ void Widget::aiEButtonPushed()
 {
     this->hide();
     game->show();
+    game->clearScore();
     game->setMode(AIE);
 }
 
@@ -47,5 +49,6 @@ void Widget::aiDButtonPushed()
 {
     this->hide();
     game->show();
+    game->clearScore();
     game->setMode(AID);
 }
