@@ -6,9 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>599</width>
-    <height>508</height>
+    <width>1141</width>
+    <height>908</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>黑体</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -16,8 +21,8 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>30</y>
+     <x>990</x>
+     <y>140</y>
      <width>111</width>
      <height>121</height>
     </rect>
@@ -27,6 +32,8 @@
      <widget class="QLabel" name="wihte">
       <property name="font">
        <font>
+        <family>微软雅黑</family>
+        <pointsize>12</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -37,10 +44,19 @@
      </widget>
     </item>
     <item>
-     <widget class="QLCDNumber" name="lcd_white"/>
+     <widget class="QLCDNumber" name="lcd_white">
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/x.jpg);</string>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QLabel" name="whitepos">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string/>
       </property>
@@ -51,8 +67,8 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>180</y>
+     <x>990</x>
+     <y>380</y>
      <width>111</width>
      <height>121</height>
     </rect>
@@ -62,6 +78,8 @@
      <widget class="QLabel" name="black">
       <property name="font">
        <font>
+        <family>微软雅黑</family>
+        <pointsize>12</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -72,25 +90,43 @@
      </widget>
     </item>
     <item>
-     <widget class="QLCDNumber" name="lcd_black"/>
+     <widget class="QLCDNumber" name="lcd_black">
+      <property name="styleSheet">
+       <string notr="true">border-image: url(:/x.jpg);</string>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QLabel" name="blackpos">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="text">
        <string/>
       </property>
      </widget>
     </item>
    </layout>
+   <zorder>lcd_black</zorder>
+   <zorder>black</zorder>
+   <zorder>blackpos</zorder>
   </widget>
   <widget class="QPushButton" name="returnButton">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>410</y>
-     <width>91</width>
-     <height>31</height>
+     <x>970</x>
+     <y>680</y>
+     <width>131</width>
+     <height>61</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>黑体</family>
+     <pointsize>12</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>返回</string>
@@ -99,11 +135,16 @@
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>130</y>
+     <x>1000</x>
+     <y>240</y>
      <width>81</width>
      <height>18</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
    </property>
    <property name="text">
     <string/>

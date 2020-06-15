@@ -6,7 +6,7 @@ gamewighet::gamewighet(QWidget *parent) :
     ui(new Ui::gamewighet)
 {
     ui->setupUi(this);
-    setFixedSize(600, 500);
+    setFixedSize(1200, 900);
     setWindowTitle("Gobang");
     setWindowIcon(QIcon(":/mark.jpg"));
 
@@ -14,8 +14,8 @@ gamewighet::gamewighet(QWidget *parent) :
     {
         for (int j = 0; j < 15; ++j)
         {
-            chessboard[i][j].setX(20 + 30 * i);
-            chessboard[i][j].setY(20 + 30 * j);
+            chessboard[i][j].setX(180 + 50 * i);
+            chessboard[i][j].setY(120 + 50 * j);
         }
     }
     //由于qt中坐标轴的原因，再绘制过程中为（i，j）表示第i列第j行的坐标
@@ -54,7 +54,7 @@ void gamewighet::initGame()
 void gamewighet::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    painter.drawPixmap(rect(), QPixmap(":/timg.jpg"), QRect());
+    painter.drawPixmap(rect(), QPixmap(":/time1.jpg"), QRect());
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::black);
     for (int i = 0; i < 15; ++i)
@@ -67,7 +67,7 @@ void gamewighet::paintEvent(QPaintEvent *event)
     else painter.setBrush(Qt::white);
     if (nowCol != -1 && nowRow != -1)
     {
-        QRect rec(chessboard[nowCol][nowRow].x() - 4, chessboard[nowCol][nowRow].y() - 4, 8, 8);
+        QRect rec(chessboard[nowCol][nowRow].x() - 6, chessboard[nowCol][nowRow].y() - 6, 12, 12);
         painter.drawRect(rec);
     }
     //画光标
@@ -79,7 +79,7 @@ void gamewighet::paintEvent(QPaintEvent *event)
             {
                 if (playChess.chesses[i][j] == C_BLACK) painter.setBrush(Qt::black);
                 else painter.setBrush(Qt::white);
-                painter.drawEllipse(chessboard[j][i].x() - 10, chessboard[j][i].y() - 10, 20, 20);
+                painter.drawEllipse(chessboard[j][i].x() - 15, chessboard[j][i].y() - 15, 30, 30);
             }
         }
     }
@@ -88,7 +88,7 @@ void gamewighet::paintEvent(QPaintEvent *event)
 
 void gamewighet::mouseMoveEvent(QMouseEvent *event)
 {
-    if (event->x() >= 5 && event->x() <=455 && event->y() >= 5 && event->y() <= 455)
+    if (event->x() >= 180 && event->x() <=930 && event->y() >= 120 && event->y() <= 870)
     {
         setCursor(Qt::BlankCursor);
         for (int i = 0; i < 15; ++i)
