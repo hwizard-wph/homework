@@ -1,6 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include "gamewighet.h"
+#include"chess.h"
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -16,6 +17,7 @@ Widget::Widget(QWidget *parent)
     connect(this->ui->btn_aid, SIGNAL(clicked(bool)), this, SLOT(aiDButtonPushed()));
     connect(this->ui->btn_aie, SIGNAL(clicked(bool)), this, SLOT(aiEButtonPushed()));
     connect(game, &gamewighet::returnSignal, this, &Widget::show);
+
 }
 
 Widget::~Widget()

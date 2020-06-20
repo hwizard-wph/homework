@@ -1,6 +1,6 @@
 #include "gamewighet.h"
 #include "ui_gamewighet.h"
-
+#include <QSound>
 gamewighet::gamewighet(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::gamewighet)
@@ -41,6 +41,7 @@ void gamewighet::returnButtonPushed()
 {
     emit returnSignal();
     this->hide();
+    playChess.step=0;
     initGame();
 }
 
@@ -160,7 +161,7 @@ void gamewighet::mouseReleaseEvent(QMouseEvent *event)
 bool gamewighet::chessOneByPlayer()
 {
     if (playChess.chesses[nowRow][nowCol] == C_EMPTY)
-    {
+    { QSound::play(":/1.wav");
         QString str;
         str = "落子：";
         str += QString::number(nowRow);
@@ -239,6 +240,8 @@ void gamewighet::chessOneByAI()
 {
     if (mode == AID)
     {
+        if(playChess.step>5)
+        {
         playChess.nodeNum = 0;
         playChess.analyze(playChess.chesses, 6, INT_MIN, INT_MAX);
         QPoint p = playChess.decision.pos;
@@ -253,11 +256,32 @@ void gamewighet::chessOneByAI()
             str += "列";
             ui->whitepos->setText(str);
         }
+        playChess.step++;
+        }
+        else
+        {
+            playChess.highestScorePos(playChess.chesses);
+            QPoint p = playChess.decision.pos;
+            if (isLegalMove(p.x(), p.y()))
+            {
+                chessMoveOne(p.x(), p.y());
+                QString str;
+                str = "落子：";
+                str += QString::number(p.x());
+                str += "行";
+                str += QString::number(p.y());
+                str += "列";
+                ui->whitepos->setText(str);
+            }
+            playChess.step++;
+
+        }
     }
     else
     {
         playChess.highestScorePos(playChess.chesses);
         QPoint p = playChess.decision.pos;
+
         if (isLegalMove(p.x(), p.y()))
         {
             chessMoveOne(p.x(), p.y());
@@ -269,6 +293,8 @@ void gamewighet::chessOneByAI()
             str += "列";
             ui->whitepos->setText(str);
         }
+        playChess.step++;
+
     }
 }
 

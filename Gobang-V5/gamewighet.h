@@ -32,6 +32,7 @@ public:
     bool isDeadGame();
     bool isLegalMove(int, int);
 
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
