@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>res.qrc</file>
-        <file>mark.jpg</file>
-        <file>time1.jpg</file>
-        <file>x.jpg</file>
-    </qresource>
-</RCC>
